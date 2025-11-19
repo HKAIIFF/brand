@@ -1,894 +1,693 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HKAIIFF - 香港AI國際電影節 | 品牌介紹</title>
-    <meta name="description" content="全球首個AI原生電影節，獎金池高達300萬美元">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Orbitron:wght@700;800&display=swap" rel="stylesheet">
+    <title>HKAIIFF Brand Center | 香港AI國際電影節品牌中心</title>
+    <meta name="description" content="Official Brand Center of Hong Kong AI International Film Festival. The World's First AI-Native Film Ecosystem.">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;400;500;700;900&family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --primary: #3498db;
-            --secondary: #8e44ad;
-            --accent: #00ff9d;
-            --gold: #ffd700;
+            --primary: #3498db;    /* Blue */
+            --secondary: #8e44ad;  /* Purple */
+            --accent: #00ff9d;     /* Neon Green */
+            --gold: #ffd700;       /* Gold */
+            --bg-dark: #0a0a0a;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(20, 20, 25, 0.6);
         }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
+            background-color: var(--bg-dark);
+            color: white;
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
-            background-color: #0a0a0a;
-            color: #ffffff;
             overflow-x: hidden;
             line-height: 1.6;
         }
-        
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background: linear-gradient(135deg, rgba(52,152,219,0.1), rgba(142,68,173,0.1));
+
+        /* Fonts */
+        .font-tech { font-family: 'Orbitron', 'Noto Sans TC', sans-serif; }
+        .font-mono-tech { font-family: 'Rajdhani', monospace; }
+
+        /* Language Toggle */
+        .lang-en { display: block; }
+        .lang-zh { display: none; }
+        body.zh-mode .lang-en { display: none !important; }
+        body.zh-mode .lang-zh { display: block !important; }
+
+        /* Background Canvas */
+        #neuro-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
         }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAyKSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
-            opacity: 0.3;
-            z-index: -1;
+
+        /* Infinite Scroll Ticker */
+        .ticker-container { width: 100%; overflow: hidden; position: relative; }
+        .ticker-container::before, .ticker-container::after {
+            content: ""; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2; pointer-events: none;
         }
-        
-        .logo { 
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
-            font-weight: 800;
+        .ticker-container::before { left: 0; background: linear-gradient(to right, var(--bg-dark), transparent); }
+        .ticker-container::after { right: 0; background: linear-gradient(to left, var(--bg-dark), transparent); }
+        .ticker-track { display: flex; width: max-content; animation: ticker 60s linear infinite; }
+        .ticker-track:hover { animation-play-state: paused; }
+        .ticker-track.reverse { animation-direction: reverse; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        .partner-item {
+            display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 2rem; margin: 0 1rem;
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; background: rgba(255,255,255,0.03);
+            white-space: nowrap; transition: all 0.3s; font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 1.1rem; color: #ccc;
+        }
+        .partner-item:hover {
+            border-color: var(--accent); background: rgba(0, 255, 157, 0.1); color: white; transform: scale(1.05); box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border);
+            border-radius: 16px; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .glass-card:hover {
+            transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 15px 30px rgba(0, 255, 157, 0.15);
+        }
+
+        /* Gradient Text */
+        .text-gradient {
             background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            background-size: 200% auto; animation: shine 5s linear infinite;
         }
-        
-        .nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(10,10,10,0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(0,255,157,0.2);
+        @keyframes shine { to { background-position: 200% center; } }
+
+        /* Loader */
+        #loader {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
         }
-        
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .loader-bar { width: 200px; height: 2px; background: #333; margin-top: 20px; position: relative; }
+        .loader-progress { position: absolute; left: 0; top: 0; height: 100%; width: 0%; background: var(--accent); }
+
+        /* Certificate Styles */
+        .certificate-tabs {
+            display: flex; margin-bottom: 30px; background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px; padding: 5px; flex-wrap: wrap; border: 1px solid var(--glass-border);
         }
-        
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-links a {
-            color: #ccc;
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
+        .certificate-tab {
+            flex: 1; min-width: 120px; padding: 12px 16px; text-align: center; cursor: pointer;
+            border-radius: 6px; transition: all 0.3s ease; font-weight: 500; font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem; color: #aaa;
         }
-        .nav-links a:hover { color: var(--accent); }
-        
-        .lang-btn {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: transform 0.3s;
-            font-size: 0.9rem;
+        .certificate-tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white;
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.4);
         }
+        .certificate-tab:hover:not(.active) { background: rgba(255, 255, 255, 0.1); color: white; }
+        .certificate-content-wrapper { display: none; animation: fadeIn 0.5s; }
+        .certificate-content-wrapper.active { display: block; }
         
-        .lang-btn:hover { transform: translateY(-2px); }
-        
-        .section {
-            padding: 80px 20px;
+        .certificate-container {
+            background: linear-gradient(135deg, #1a1f29, #0f172a); border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 12px; padding: 30px; position: relative; overflow: hidden;
+            font-family: 'Times New Roman', serif; color: #e0e0e0; box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
         }
-        
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 1rem;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .certificate-container::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, transparent 49%, rgba(0, 255, 157, 0.05) 50%, transparent 51%);
+            background-size: 30px 30px; opacity: 0.3; pointer-events: none;
         }
+        .certificate-header { text-align: center; border-bottom: 2px solid rgba(0, 255, 157, 0.3); padding-bottom: 20px; margin-bottom: 30px; }
+        .certificate-title { font-size: 1.8rem; font-weight: bold; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
         
-        .section-subtitle {
-            text-align: center;
-            color: #aaa;
-            margin-bottom: 3rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+        .business-reg-cert {
+            background: linear-gradient(135deg, #1e293b, #0f172a); padding: 25px; border-radius: 10px;
+            border: 1px solid rgba(59, 130, 246, 0.3); font-family: 'Inter', sans-serif;
         }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
+        .reg-field { margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); }
+        .reg-field-label { font-size: 0.85rem; color: #888; margin-bottom: 5px; }
+        .reg-field-value { font-weight: 500; color: white; font-family: 'Noto Sans TC', sans-serif; }
+
+        /* Modal */
+        .certificate-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
+            backdrop-filter: blur(5px);
         }
-        
-        .card {
-            background: rgba(26,32,44,0.7);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            padding: 2rem;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
+        .certificate-modal-content { width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; animation: zoomIn 0.3s; }
+        .certificate-modal-close {
+            position: absolute; top: 20px; right: 20px; font-size: 24px; color: var(--accent);
+            cursor: pointer; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.5); border-radius: 50%; z-index: 10; border: 1px solid var(--accent);
         }
-        
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent);
-            box-shadow: 0 15px 30px rgba(0,255,157,0.2);
-        }
-        
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--accent), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-        
-        .stat {
-            text-align: center;
-            padding: 2rem;
-            background: rgba(26,32,44,0.5);
-            border-radius: 12px;
-            border: 1px solid rgba(0,255,157,0.1);
-        }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .timeline {
-            position: relative;
-            max-width: 1000px;
-            margin: 3rem auto;
-        }
-        
-        .timeline::before {
-            content: '';
-            position: absolute;
-            width: 4px;
-            background: linear-gradient(to bottom, var(--primary), var(--accent), var(--secondary));
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        .timeline-item {
-            padding: 20px 0;
-            position: relative;
-            width: 50%;
-        }
-        
-        .timeline-item:nth-child(odd) {
-            left: 0;
-            padding-right: 40px;
-        }
-        
-        .timeline-item:nth-child(even) {
-            left: 50%;
-            padding-left: 40px;
-        }
-        
-        .timeline-content {
-            padding: 20px;
-            background: rgba(26,32,44,0.7);
-            border-radius: 12px;
-            border: 1px solid rgba(0,255,157,0.2);
-        }
-        
-        .timeline-item:nth-child(odd) .timeline-content::after {
-            content: '';
-            position: absolute;
-            right: -10px;
-            top: 20px;
-            width: 20px;
-            height: 20px;
-            background: var(--accent);
-            border-radius: 50%;
-            box-shadow: 0 0 0 4px rgba(0,255,157,0.2);
-        }
-        
-        .timeline-item:nth-child(even) .timeline-content::before {
-            content: '';
-            position: absolute;
-            left: -10px;
-            top: 20px;
-            width: 20px;
-            height: 20px;
-            background: var(--accent);
-            border-radius: 50%;
-            box-shadow: 0 0 0 4px rgba(0,255,157,0.2);
-        }
-        
-        .footer {
-            background: rgba(0,0,0,0.8);
-            padding: 3rem 0 1rem;
-            border-top: 1px solid rgba(0,255,157,0.2);
-            margin-top: 5rem;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: transform 0.3s;
-        }
-        
-        .btn:hover { transform: translateY(-3px); }
-        
-        .highlight-box {
-            background: linear-gradient(135deg, rgba(52,152,219,0.2), rgba(142,68,173,0.2));
-            border: 1px solid var(--accent);
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-        
-        @media (max-width: 768px) {
-            .logo { font-size: 2.5rem; }
-            .nav-links { display: none; }
-            .timeline::before { left: 30px; }
-            .timeline-item { width: 100%; left: 0; padding-right: 0; padding-left: 60px; }
-            .timeline-item:nth-child(even) { left: 0; padding-left: 60px; }
-            .timeline-content { margin: 0; }
-            .timeline-item:nth-child(odd) .timeline-content::after { left: -10px; right: auto; }
-            .timeline-item:nth-child(even) .timeline-content::before { left: -10px; }
-            .grid { grid-template-columns: 1fr; }
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: #ccc;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        @media (max-width: 768px) {
-            .mobile-menu-btn { display: block; }
-            .nav-links.active {
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(10,10,10,0.95);
-                padding: 1rem;
-                border-top: 1px solid rgba(0,255,157,0.2);
-            }
-        }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        /* Utilities */
+        .hero-title { font-size: clamp(3.5rem, 10vw, 8rem); line-height: 1; letter-spacing: -0.02em; }
+        .prize-pool-text { font-size: clamp(3rem, 12vw, 7rem); line-height: 1; white-space: nowrap; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
     </style>
 </head>
 <body>
+
+    <!-- Background -->
+    <canvas id="neuro-canvas"></canvas>
+
+    <!-- Loader -->
+    <div id="loader" onclick="this.style.display='none'">
+        <div class="text-5xl font-tech font-black tracking-widest text-white animate-pulse mb-8">HKAIIFF</div>
+        <div class="loader-bar"><div class="loader-progress" id="loader-progress"></div></div>
+        <div class="mt-4 text-sm text-accent font-mono-tech tracking-widest">INITIALIZING SYSTEM...</div>
+        <div class="mt-8 text-xs text-gray-600">(Click if stuck)</div>
+    </div>
+
     <!-- Navigation -->
-    <nav class="nav">
-        <div class="container nav-content">
-            <div>
-                <div style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 800; background: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">HKAIIFF</div>
-                <div style="font-size: 0.7rem; color: #888;" data-en="Hong Kong AI International Film Festival" data-zh="香港AI國際電影節">香港AI國際電影節</div>
-            </div>
-            <div class="nav-links" id="navLinks">
-                <a href="#about" data-en="About" data-zh="關於">關於</a>
-                <a href="#ecosystem" data-en="Ecosystem" data-zh="生態">生態</a>
-                <a href="#tokenomics" data-en="Tokenomics" data-zh="代幣">代幣</a>
-                <a href="#roadmap" data-en="Roadmap" data-zh="路線圖">路線圖</a>
-                <a href="#contact" data-en="Contact" data-zh="聯繫">聯繫</a>
-                <button class="lang-btn" onclick="toggleLang()">
-                    <span id="langText">Switch to English</span>
+    <nav class="fixed top-0 w-full z-50 bg-black/90 backdrop-blur-lg border-b border-white/10">
+        <div class="container mx-auto px-6 h-24 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-4 group" onclick="window.scrollTo(0,0)">
+                <img src="logo.jpg" alt="Logo" class="h-12 w-auto rounded object-contain ring-2 ring-transparent group-hover:ring-accent transition-all">
+                <div class="flex flex-col">
+                    <span class="text-xl font-bold font-tech tracking-wider text-white group-hover:text-accent transition-colors">Hong Kong AI International Film Festival</span>
+                    <span class="text-[10px] text-gray-400 uppercase tracking-[0.3em]">
+                        <span class="lang-en">Brand Center</span>
+                        <span class="lang-zh">品牌中心</span>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden xl:flex items-center gap-8 text-xs font-bold tracking-widest text-gray-300 uppercase">
+                <a href="#about" class="hover:text-accent transition-all"><span class="lang-en">Vision</span><span class="lang-zh">願景</span></a>
+                <a href="#governance" class="hover:text-accent transition-all"><span class="lang-en">Governance</span><span class="lang-zh">治理</span></a>
+                <a href="#ecosystem" class="hover:text-accent transition-all"><span class="lang-en">Ecosystem</span><span class="lang-zh">生態</span></a>
+                <a href="#tokenomics" class="hover:text-accent transition-all"><span class="lang-en">Tokenomics</span><span class="lang-zh">經濟模型</span></a>
+                <a href="#certificates" class="hover:text-accent transition-all"><span class="lang-en">Certificates</span><span class="lang-zh">證書</span></a>
+                <a href="#roadmap" class="hover:text-accent transition-all"><span class="lang-en">Roadmap</span><span class="lang-zh">路線圖</span></a>
+                
+                <button onclick="toggleLanguage()" class="px-5 py-2 border border-white/20 rounded-full hover:bg-white/10 hover:border-accent transition-all flex items-center gap-2 group bg-white/5">
+                    <i class="fas fa-globe text-accent group-hover:rotate-180 transition-transform duration-700"></i>
+                    <span class="lang-en">EN / 繁</span>
+                    <span class="lang-zh">繁 / EN</span>
                 </button>
             </div>
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <i class="fas fa-bars"></i>
-            </button>
+
+            <!-- Mobile Toggle -->
+            <div class="xl:hidden flex items-center gap-4">
+                <button onclick="toggleLanguage()" class="text-xs font-bold text-accent border border-accent/30 px-3 py-1 rounded-full">
+                    <span class="lang-en">ZH</span><span class="lang-zh">EN</span>
+                </button>
+                <button class="text-white text-2xl" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden xl:hidden bg-black/95 border-b border-white/10 absolute w-full backdrop-blur-xl h-screen z-50">
+            <div class="flex flex-col p-8 space-y-8 text-center text-lg font-bold uppercase tracking-widest">
+                <button onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="absolute top-6 right-6 text-white"><i class="fas fa-times text-2xl"></i></button>
+                <a href="#about" onclick="closeMenu()" class="text-gray-300 hover:text-accent"><span class="lang-en">Vision</span><span class="lang-zh">願景</span></a>
+                <a href="#governance" onclick="closeMenu()" class="text-gray-300 hover:text-accent"><span class="lang-en">Governance</span><span class="lang-zh">治理</span></a>
+                <a href="#ecosystem" onclick="closeMenu()" class="text-gray-300 hover:text-accent"><span class="lang-en">Ecosystem</span><span class="lang-zh">生態</span></a>
+                <a href="#tokenomics" onclick="closeMenu()" class="text-gray-300 hover:text-accent"><span class="lang-en">Tokenomics</span><span class="lang-zh">經濟模型</span></a>
+                <a href="#certificates" onclick="closeMenu()" class="text-gray-300 hover:text-accent"><span class="lang-en">Certificates</span><span class="lang-zh">證書</span></a>
+            </div>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <section class="hero">
-        <div class="container">
-            <h1 class="logo" data-en="HKAIIFF" data-zh="香港AI國際電影節">香港AI國際電影節</h1>
-            <p style="font-size: 1.5rem; margin-bottom: 2rem;" data-en="Hong Kong AI International Film Festival" data-zh="香港人工智能國際電影節">香港人工智能國際電影節</p>
-            <p style="font-size: 1.2rem; color: #ccc; margin-bottom: 3rem;" data-en="World's First AI-Native Film Festival | Redefining Cinema in the Age of Artificial Intelligence" data-zh="全球首個AI原生電影節 | 重新定義人工智能時代的電影藝術">全球首個AI原生電影節 | 重新定義人工智能時代的電影藝術</p>
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('WechatIMG134.jpeg')] bg-cover bg-center opacity-20 z-0"></div>
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black via-transparent to-black z-0"></div>
+
+        <div class="container mx-auto px-4 relative z-10 text-center">
             
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-number">$3M+</div>
-                    <div data-en="Prize Pool" data-zh="獎金池">獎金池</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">40%</div>
-                    <div data-en="Min AI Participation" data-zh="最低AI參與度">最低AI參與度</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">50+</div>
-                    <div data-en="Global Partners" data-zh="全球合作夥伴">全球合作夥伴</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">10B</div>
-                    <div data-en="AIF Token Supply" data-zh="AIF代幣總量">AIF代幣總量</div>
-                </div>
+            <div class="gs-reveal inline-flex items-center gap-3 px-6 py-2 mb-10 border border-accent/30 bg-accent/5 rounded-full backdrop-blur-md">
+                <span class="w-3 h-3 bg-accent rounded-full animate-pulse shadow-[0_0_10px_#00ff9d]"></span>
+                <span class="text-accent text-sm font-mono-tech tracking-[0.2em] uppercase font-bold">
+                    <span class="lang-en">Brand Center • Est. 2025</span>
+                    <span class="lang-zh">品牌中心 • 2025年成立</span>
+                </span>
             </div>
-        </div>
-    </section>
 
-    <!-- Part I: Historical Background -->
-    <section id="about" class="section">
-        <div class="container">
-            <h2 class="section-title" data-en="Historical Background and Organizational Positioning" data-zh="歷史背景與組織定位">歷史背景與組織定位</h2>
+            <h1 class="gs-reveal hero-title font-black mb-8 leading-none tracking-tighter">
+                <span class="block text-white drop-shadow-lg">
+                    <span class="lang-en">HONG KONG</span><span class="lang-zh">香港</span>
+                </span>
+                <span class="block text-gradient filter drop-shadow-[0_0_30px_rgba(0,255,157,0.3)]">
+                    <span class="lang-en">AI INTERNATIONAL</span><span class="lang-zh">人工智能國際</span>
+                </span>
+                <span class="block text-gray-400">
+                    <span class="lang-en">FILM FESTIVAL</span><span class="lang-zh">電影節</span>
+                </span>
+            </h1>
+
+            <p class="gs-reveal text-xl md:text-3xl text-gray-300 max-w-4xl mx-auto mb-16 font-light leading-relaxed">
+                <span class="lang-en">Redefining Cinema Art in the Intelligence Era.<br>Building the Infrastructure for the <strong class="text-white">Next-Gen Creative Economy</strong>.</span>
+                <span class="lang-zh">重新定義智能時代的電影藝術。<br>構建<strong class="text-white">新一代創意經濟</strong>的基礎設施。</span>
+            </p>
+
+            <div class="gs-reveal flex flex-col sm:flex-row justify-center gap-6 mb-20">
+                <!-- FIXED: Text color to yellow-300 for visibility -->
+                <a href="#ecosystem" class="px-12 py-5 bg-gradient-to-r from-accent to-primary text-yellow-300 font-black text-lg rounded-full hover:scale-105 transition-all font-tech tracking-wider shadow-[0_0_30px_rgba(0,255,157,0.4)] drop-shadow-md border border-white/10">
+                    <span class="lang-en">EXPLORE ECOSYSTEM</span><span class="lang-zh">探索生態系統</span>
+                </a>
+                <a href="#governance" class="px-12 py-5 border border-white/30 text-white font-black text-lg rounded-full hover:bg-white/10 transition-all font-tech tracking-wider backdrop-blur-sm">
+                    <span class="lang-en">GOVERNANCE</span><span class="lang-zh">組織架構</span>
+                </a>
+            </div>
             
-            <div class="grid">
-                <div class="card">
-                    <i class="fas fa-film card-icon"></i>
-                    <h3 class="card-title" data-en="Historical Heritage" data-zh="歷史傳承">歷史傳承</h3>
-                    <p style="color: #ccc;" data-en="The Hong Kong film industry boasts over a century of glorious history. Since 1909, Hong Kong cinema has evolved from silent films to sound, from black-and-white to color. The Hong Kong International Film Festival (HKIFF), established in 1977, has become one of Asia's most influential film festivals with over 49 editions." data-zh="香港電影產業擁有超過百年的輝煌歷史。自1909年以來,香港電影從默片時代演進到有聲電影,從黑白影像到彩色巨製。香港國際電影節(HKIFF)自1977年創辦,已舉辦超過49屆,成為亞洲最具影響力的電影節之一。">香港電影產業擁有超過百年的輝煌歷史。自1909年以來,香港電影從默片時代演進到有聲電影,從黑白影像到彩色巨製。香港國際電影節(HKIFF)自1977年創辦,已舉辦超過49屆,成為亞洲最具影響力的電影節之一。</p>
+            <!-- Stats Bar -->
+            <div class="gs-reveal grid grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto border-t border-white/10 pt-10">
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold text-gold font-mono-tech counter" data-target="3000000">$0</div>
+                    <div class="text-xs text-gray-500 uppercase tracking-[0.2em] mt-2"><span class="lang-en">Prize Pool</span><span class="lang-zh">總獎金池</span></div>
                 </div>
-                
-                <div class="card">
-                    <i class="fas fa-rocket card-icon"></i>
-                    <h3 class="card-title" data-en="Historic Breakthrough" data-zh="歷史性突破">歷史性突破</h3>
-                    <p style="color: #ccc;" data-en="In Q4 2024, the Hong Kong AI International Film Festival Association was officially approved and registered by the Hong Kong SAR Government, marking Hong Kong's official opening of a new chapter in AI-era cinema. This creates an innovative dual-track development pattern alongside HKIFF." data-zh="2024年第四季度,香港AI國際電影節協會經香港特別行政區政府正式批復註冊,標誌著香港正式開啟人工智能時代電影藝術的全新篇章。這與香港國際電影節形成創新的雙線並行發展格局。">2024年第四季度,香港AI國際電影節協會經香港特別行政區政府正式批復註冊,標誌著香港正式開啟人工智能時代電影藝術的全新篇章。這與香港國際電影節形成創新的雙線並行發展格局。</p>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold text-accent font-mono-tech">10B</div>
+                    <div class="text-xs text-gray-500 uppercase tracking-[0.2em] mt-2"><span class="lang-en">Total Supply</span><span class="lang-zh">代幣總量</span></div>
                 </div>
-                
-                <div class="card">
-                    <i class="fas fa-balance-scale card-icon"></i>
-                    <h3 class="card-title" data-en="Dual-Track Development" data-zh="雙線發展格局">雙線發展格局</h3>
-                    <p style="color: #ccc;" data-en="HKIFF continues to uphold traditional film art standards while HKAIIFF explores new possibilities for AI-cinema integration. Together they form a complete ecosystem, consolidating Hong Kong's unique position in the global film industry." data-zh="香港國際電影節繼續堅守傳統電影藝術標準,而香港AI國際電影節探索AI與電影藝術融合的全新可能。兩者共同構成完整生態系統,鞏固香港在全球電影產業中的獨特地位。">香港國際電影節繼續堅守傳統電影藝術標準,而香港AI國際電影節探索AI與電影藝術融合的全新可能。兩者共同構成完整生態系統,鞏固香港在全球電影產業中的獨特地位。</p>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold text-primary font-mono-tech">40%</div>
+                    <div class="text-xs text-gray-500 uppercase tracking-[0.2em] mt-2"><span class="lang-en">AI Native Ratio</span><span class="lang-zh">AI原生度要求</span></div>
                 </div>
-            </div>
-
-            <div class="highlight-box" style="margin-top: 3rem;">
-                <h3 style="font-size: 2rem; margin-bottom: 1rem; color: var(--accent);" data-en="Governance Structure" data-zh="治理結構">治理結構</h3>
-                <p style="margin-bottom: 2rem; color: #ccc;" data-en="HKAIIFF adopts the same mature governance framework as HKIFF, ensuring professionalism, transparency, and international credibility. The Association uses an executive committee responsibility system under Board of Directors leadership." data-zh="香港AI國際電影節協會採用與香港國際電影節相同的成熟治理框架,確保專業性、透明度和國際公信力。協會採用理事會領導下的執行委員會負責制。">香港AI國際電影節協會採用與香港國際電影節相同的成熟治理框架,確保專業性、透明度和國際公信力。協會採用理事會領導下的執行委員會負責制。</p>
-                
-                <div class="grid">
-                    <div style="background: rgba(0,0,0,0.5); padding: 1.5rem; border-radius: 8px;">
-                        <h4 style="color: var(--primary); margin-bottom: 1rem;" data-en="Board of Directors" data-zh="理事會">理事會</h4>
-                        <ul style="color: #ccc; line-height: 1.8;">
-                            <li data-en="• Senior experts from film, AI, culture, and finance" data-zh="• 來自電影、AI、文化、金融領域的資深專家">• 來自電影、AI、文化、金融領域的資深專家</li>
-                            <li data-en="• Formulates strategic directions" data-zh="• 制定戰略方向">• 制定戰略方向</li>
-                            <li data-en="• Approves major decisions" data-zh="• 審批重大決策">• 審批重大決策</li>
-                        </ul>
-                    </div>
-                    
-                    <div style="background: rgba(0,0,0,0.5); padding: 1.5rem; border-radius: 8px;">
-                        <h4 style="color: var(--accent); margin-bottom: 1rem;" data-en="Executive Committee" data-zh="執行委員會">執行委員會</h4>
-                        <ul style="color: #ccc; line-height: 1.8;">
-                            <li data-en="• Chairman, Artistic Director, Technical Director" data-zh="• 主席、藝術總監、技術總監">• 主席、藝術總監、技術總監</li>
-                            <li data-en="• Operations and International Relations Directors" data-zh="• 運營總監、國際關係總監">• 運營總監、國際關係總監</li>
-                            <li data-en="• Daily operational management" data-zh="• 日常運營管理">• 日常運營管理</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="grid" style="margin-top: 2rem;">
-                    <div style="text-align: center; padding: 1rem; background: rgba(52,152,219,0.2); border-radius: 8px;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.5rem;" data-en="Technical Committee" data-zh="技術委員會">技術委員會</h5>
-                        <p style="font-size: 0.9rem; color: #aaa;" data-en="AI experts providing technical standards" data-zh="AI技術專家提供技術標準">AI技術專家提供技術標準</p>
-                    </div>
-                    <div style="text-align: center; padding: 1rem; background: rgba(142,68,173,0.2); border-radius: 8px;">
-                        <h5 style="color: #b794f6; margin-bottom: 0.5rem;" data-en="Arts Committee" data-zh="藝術委員會">藝術委員會</h5>
-                        <p style="font-size: 0.9rem; color: #aaa;" data-en="Film experts for artistic evaluation" data-zh="影視藝術專家負責藝術評價">影視藝術專家負責藝術評價</p>
-                    </div>
-                    <div style="text-align: center; padding: 1rem; background: rgba(0,255,157,0.2); border-radius: 8px;">
-                        <h5 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Business Committee" data-zh="商業委員會">商業委員會</h5>
-                        <p style="font-size: 0.9rem; color: #aaa;" data-en="Market experts assessing value" data-zh="市場專家評估商業價值">市場專家評估商業價值</p>
-                    </div>
-                    <div style="text-align: center; padding: 1rem; background: rgba(255,215,0,0.2); border-radius: 8px;">
-                        <h5 style="color: var(--gold); margin-bottom: 0.5rem;" data-en="Legal Committee" data-zh="法律委員會">法律委員會</h5>
-                        <p style="font-size: 0.9rem; color: #aaa;" data-en="Legal experts for compliance" data-zh="法律專家處理合規事務">法律專家處理合規事務</p>
-                    </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold text-secondary font-mono-tech">9+1</div>
+                    <div class="text-xs text-gray-500 uppercase tracking-[0.2em] mt-2"><span class="lang-en">Ecosystem</span><span class="lang-zh">生態架構</span></div>
                 </div>
             </div>
+        </div>
+    </header>
 
-            <div class="highlight-box">
-                <h3 style="font-size: 2rem; margin-bottom: 1rem; color: var(--accent);" data-en="Core Mission and Strategic Positioning" data-zh="核心使命與戰略定位">核心使命與戰略定位</h3>
-                <p style="margin-bottom: 2rem; color: #ccc;" data-en="To become the global standard-setter, value discoverer, and cultural leader for AI-native film art" data-zh="成為全球AI原生電影藝術的標準制定者、價值發現者和文化引領者">成為全球AI原生電影藝術的標準制定者、價值發現者和文化引領者</p>
+    <!-- Section 1: Vision & "Conductor Theory" -->
+    <section id="about" class="py-32 relative">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-16 items-center mb-24">
+                <!-- Left: Conductor Theory -->
+                <div class="gs-slide-right">
+                    <h2 class="text-4xl font-bold mb-6 font-tech text-white">
+                        <span class="lang-en">The <span class="text-primary">Conductor</span> Theory</span>
+                        <span class="lang-zh"><span class="text-primary">指揮家論</span>：範式轉移</span>
+                    </h2>
+                    <div class="space-y-6 text-gray-400 leading-relaxed text-lg">
+                        <p>
+                            <span class="lang-en">Traditionally, the "Auteur Theory" viewed the director as the sole author. In the AI era, we propose the <strong>"Conductor Theory"</strong>.</span>
+                            <span class="lang-zh">傳統的「作者論」將導演視為唯一的作者。在AI時代，我們提出了<strong>「指揮家論」</strong>。</span>
+                        </p>
+                        <p>
+                            <span class="lang-en">Creators are no longer just executing a fixed blueprint, but guiding complex AI systems like a symphony conductor. Through precise prompt engineering and model tuning, they orchestrate a new form of collaborative art.</span>
+                            <span class="lang-zh">創作者不再只是執行固定的藍圖，而是像交響樂指揮一樣，通過精準的指令工程和模型調教，引導複雜的AI系統共同完成藝術創作。</span>
+                        </p>
+                    </div>
+                </div>
                 
-                <div class="grid">
-                    <div style="background: rgba(0,0,0,0.5); padding: 1.5rem; border-radius: 8px;">
-                        <h4 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Redefining Film Art" data-zh="重新定義電影藝術">重新定義電影藝術</h4>
-                        <p style="color: #aaa; font-size: 0.95rem;" data-en="Establishing AI-era evaluation standards and aesthetic norms" data-zh="建立適應AI時代的評價標準和美學規範">建立適應AI時代的評價標準和美學規範</p>
-                    </div>
-                    <div style="background: rgba(0,0,0,0.5); padding: 1.5rem; border-radius: 8px;">
-                        <h4 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Paradigm Revolution" data-zh="範式革命">範式革命</h4>
-                        <p style="color: #aaa; font-size: 0.95rem;" data-en="Promoting deep integration of AI with film art" data-zh="推動AI技術與電影藝術的深度融合">推動AI技術與電影藝術的深度融合</p>
-                    </div>
-                    <div style="background: rgba(0,0,0,0.5); padding: 1.5rem; border-radius: 8px;">
-                        <h4 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Talent Cultivation" data-zh="人才培養">人才培養</h4>
-                        <p style="color: #aaa; font-size: 0.95rem;" data-en="Cultivating interdisciplinary creators with technical and artistic skills" data-zh="培養具備技術素養和藝術修養的複合型人才">培養具備技術素養和藝術修養的複合型人才</p>
-                    </div>
-                    <div style="background: rgba(0,0,0,0.5); padding: 1.5rem; border-radius: 8px;">
-                        <h4 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Global Exchange" data-zh="全球交流">全球交流</h4>
-                        <p style="color: #aaa; font-size: 0.95rem;" data-en="Building platforms connecting East-West AI creative resources" data-zh="構建連接東西方AI創作資源的全球交流平台">構建連接東西方AI創作資源的全球交流平台</p>
+                <!-- Right: Dual Track Development -->
+                <div class="gs-slide-left">
+                    <div class="glass-card p-8 border-l-4 border-gold">
+                        <h3 class="text-gold font-bold mb-4 text-xl uppercase tracking-widest"><span class="lang-en">Dual-Track Development</span><span class="lang-zh">雙線並行發展</span></h3>
+                        <div class="space-y-4 text-white">
+                            <div class="flex items-start gap-4">
+                                <div class="p-2 bg-white/10 rounded"><i class="fas fa-film text-xl"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-lg">HKIFF</h4>
+                                    <p class="text-sm text-gray-400"><span class="lang-en">Preserving Traditional Cinema</span><span class="lang-zh">堅守傳統電影藝術</span></p>
+                                </div>
+                            </div>
+                            <div class="w-full h-px bg-white/10"></div>
+                            <div class="flex items-start gap-4">
+                                <div class="p-2 bg-accent/10 rounded"><i class="fas fa-robot text-xl text-accent"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-lg text-accent">HKAIIFF</h4>
+                                    <p class="text-sm text-gray-400"><span class="lang-en">Pioneering the Future</span><span class="lang-zh">探索未來AI電影</span></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Part II: Ecosystem -->
-    <section id="ecosystem" class="section" style="background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.5), transparent);">
-        <div class="container">
-            <h2 class="section-title" data-en="Complete Ecosystem Architecture" data-zh="完整生態系統架構">完整生態系統架構</h2>
-            <p class="section-subtitle" data-en="The '4+1+1' core ecosystem: 4 pillars + 2 infrastructures forming a complete value chain from ideation to monetization" data-zh="「4+1+1」核心生態體系:四大支柱+兩大基礎設施,形成從創意孵化到商業變現的完整價值鏈">「4+1+1」核心生態體系:四大支柱+兩大基礎設施,形成從創意孵化到商業變現的完整價值鏈</p>
+    <!-- Section: Governance (Added Legal Committee) -->
+    <section id="governance" class="py-24 relative bg-white/5">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 font-tech text-white">
+                    <span class="lang-en">Governance Structure</span>
+                    <span class="lang-zh">組織治理架構</span>
+                </h2>
+                <p class="text-gray-400"><span class="lang-en">Professional, Transparent, International.</span><span class="lang-zh">專業、透明、國際化。</span></p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                <div class="col-span-1 md:col-span-2 lg:col-span-4 glass-card p-8 border-t-4 border-primary flex flex-col md:flex-row items-center gap-8">
+                    <div class="text-6xl text-primary"><i class="fas fa-sitemap"></i></div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-2"><span class="lang-en">Board of Directors</span><span class="lang-zh">理事會</span></h3>
+                        <p class="text-gray-300 text-sm"><span class="lang-en">The highest decision-making body composed of leaders in Film, AI, Finance, and Culture. Responsible for strategic direction, major approvals, and supervision.</span><span class="lang-zh">由電影、AI、金融及文化領域領袖組成的最高決策機構。負責制定戰略方向、審批重大決策及監督執行。</span></p>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 hover:border-accent transition-colors">
+                    <div class="text-accent text-3xl mb-4"><i class="fas fa-code"></i></div>
+                    <h4 class="text-lg font-bold text-white mb-2"><span class="lang-en">Technical Committee</span><span class="lang-zh">技術委員會</span></h4>
+                    <p class="text-xs text-gray-400"><span class="lang-en">AI technology experts defining standards.</span><span class="lang-zh">由AI技術專家組成，提供技術標準。</span></p>
+                </div>
+                <div class="glass-card p-6 hover:border-secondary transition-colors">
+                    <div class="text-secondary text-3xl mb-4"><i class="fas fa-palette"></i></div>
+                    <h4 class="text-lg font-bold text-white mb-2"><span class="lang-en">Arts Committee</span><span class="lang-zh">藝術委員會</span></h4>
+                    <p class="text-xs text-gray-400"><span class="lang-en">Film experts ensuring artistic quality.</span><span class="lang-zh">由影視專家組成，負責藝術評價。</span></p>
+                </div>
+                <div class="glass-card p-6 hover:border-gold transition-colors">
+                    <div class="text-gold text-3xl mb-4"><i class="fas fa-chart-line"></i></div>
+                    <h4 class="text-lg font-bold text-white mb-2"><span class="lang-en">Business Committee</span><span class="lang-zh">商業委員會</span></h4>
+                    <p class="text-xs text-gray-400"><span class="lang-en">Experts assessing market value.</span><span class="lang-zh">由投資專家組成，評估商業價值。</span></p>
+                </div>
+                <!-- Added Legal Committee -->
+                <div class="glass-card p-6 hover:border-red-400 transition-colors">
+                    <div class="text-red-400 text-3xl mb-4"><i class="fas fa-balance-scale"></i></div>
+                    <h4 class="text-lg font-bold text-white mb-2"><span class="lang-en">Legal & Compliance</span><span class="lang-zh">法律與合規委員會</span></h4>
+                    <p class="text-xs text-gray-400"><span class="lang-en">Ensuring global regulatory adherence.</span><span class="lang-zh">由法律專家組成，確保全球合規運營。</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <h3 style="text-align: center; font-size: 2rem; color: var(--accent); margin-bottom: 2rem;" data-en="Four Core Pillars" data-zh="四大核心支柱">四大核心支柱</h3>
+    <!-- Section: Ecosystem (The Full 9+1 Version) -->
+    <section id="ecosystem" class="py-32">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-20 gs-fade-up">
+                <h2 class="text-5xl md:text-6xl font-bold mb-6 font-tech text-white text-glow">
+                    <span class="lang-en">The "9+1" Ecosystem</span>
+                    <span class="lang-zh">「9+1」生態架構</span>
+                </h2>
+                <p class="text-gray-400 max-w-3xl mx-auto text-lg">
+                    <span class="lang-en">4 Pillars + 2 Infrastructure + 3 Innovation Platforms. A complete value loop.</span>
+                    <span class="lang-zh">4大支柱 + 2大基建 + 3大創新平台。從創意孵化到商業變現的完整閉環。</span>
+                </p>
+            </div>
             
-            <div class="grid">
-                <!-- Pillar 1 -->
-                <div class="card">
-                    <i class="fas fa-trophy card-icon"></i>
-                    <h4 class="card-title" data-en="International Screening & Competition" data-zh="國際展映競賽單元">國際展映競賽單元</h4>
-                    <p style="color: #ccc; margin-bottom: 1rem;" data-en="Annual global AI-native film festival with $3M+ prize pool and multiple award categories" data-zh="年度全球AI原生電影節,300萬美元以上獎金池,多個獎項類別">年度全球AI原生電影節,300萬美元以上獎金池,多個獎項類別</p>
-                    
-                    <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--gold); margin-bottom: 0.5rem;" data-en="Award Categories" data-zh="獎項類別">獎項類別</h5>
-                        <ul style="font-size: 0.9rem; color: #aaa; line-height: 1.8;">
-                            <li data-en="• Best AI-Native Feature/Short Film" data-zh="• 最佳AI原生長片/短片">• 最佳AI原生長片/短片</li>
-                            <li data-en="• Best AI Technical Innovation" data-zh="• 最佳AI技術創新">• 最佳AI技術創新</li>
-                            <li data-en="• Best AI Artistic Expression" data-zh="• 最佳AI藝術表現">• 最佳AI藝術表現</li>
-                            <li data-en="• Best Interactive Experience" data-zh="• 最佳互動體驗">• 最佳互動體驗</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: rgba(52,152,219,0.2); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.5rem;" data-en="AI-Native Standard" data-zh="AI原生標準">AI原生標準</h5>
-                        <p style="font-size: 0.85rem; color: #ccc;" data-en="AI Participation = (AI Content × 0.4) + (AI-Assisted × 0.3) + (AI Innovation × 0.3) ≥ 40%" data-zh="AI參與度 = (AI生成內容 × 0.4) + (AI輔助創作 × 0.3) + (AI技術創新 × 0.3) ≥ 40%">AI參與度 = (AI生成內容 × 0.4) + (AI輔助創作 × 0.3) + (AI技術創新 × 0.3) ≥ 40%</p>
-                    </div>
+            <div class="feature-grid mb-16">
+                <!-- 4 Pillars -->
+                <div class="glass-card p-8 border-t-4 border-gold group hover:bg-white/5">
+                    <div class="text-4xl mb-4 text-gold">🏆</div>
+                    <h3 class="text-xl font-bold mb-2 text-white"><span class="lang-en">Competition Unit</span><span class="lang-zh">展映競賽單元</span></h3>
+                    <p class="text-sm text-gray-400 mb-4"><span class="lang-en">$3M Prize Pool. Global touring. Unicorn Gold Award ($1M).</span><span class="lang-zh">300萬美元獎金池。全球巡展。獨角獸金獎（100萬美元）。</span></p>
+                    <div class="text-xs text-gold font-bold"><i class="fas fa-star mr-1"></i> <span class="lang-en">Core Brand Activity</span><span class="lang-zh">核心品牌活動</span></div>
                 </div>
-
-                <!-- Pillar 2 -->
-                <div class="card">
-                    <i class="fas fa-graduation-cap card-icon"></i>
-                    <h4 class="card-title" data-en="Hong Kong AI Film Academy" data-zh="香港AI電影學院">香港AI電影學院</h4>
-                    <p style="color: #ccc; margin-bottom: 1rem;" data-en="AIF.Academy cultivates interdisciplinary talent mastering both AI technology and film art" data-zh="AIF.Academy培養掌握AI技術和電影藝術的複合型人才">AIF.Academy培養掌握AI技術和電影藝術的複合型人才</p>
-
-                    <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.5rem;" data-en="Curriculum" data-zh="課程">課程</h5>
-                        <ul style="font-size: 0.9rem; color: #aaa; line-height: 1.8;">
-                            <li data-en="• AI-Assisted Screenwriting" data-zh="• AI輔助編劇">• AI輔助編劇</li>
-                            <li data-en="• AI Scene/Character Design" data-zh="• AI場景/角色設計">• AI場景/角色設計</li>
-                            <li data-en="• Prompt Engineering" data-zh="• 提示詞工程">• 提示詞工程</li>
-                            <li data-en="• Film Aesthetics & Theory" data-zh="• 電影美學與理論">• 電影美學與理論</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: rgba(0,255,157,0.2); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Academic Partners" data-zh="學術合作">學術合作</h5>
-                        <p style="font-size: 0.9rem; color: #ccc;">MIT, Stanford, Carnegie Mellon, Tsinghua, HKU</p>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
-                        <div style="text-align: center; padding: 1rem; background: rgba(0,0,0,0.5); border-radius: 8px;">
-                            <div style="font-size: 1.5rem; color: var(--accent); font-weight: 700;">10,000+</div>
-                            <div style="font-size: 0.85rem; color: #aaa;" data-en="Annual Students" data-zh="年度學員">年度學員</div>
-                        </div>
-                        <div style="text-align: center; padding: 1rem; background: rgba(0,0,0,0.5); border-radius: 8px;">
-                            <div style="font-size: 1.5rem; color: var(--accent); font-weight: 700;">100%</div>
-                            <div style="font-size: 0.85rem; color: #aaa;" data-en="NFT-ization" data-zh="NFT化">NFT化</div>
-                        </div>
-                    </div>
+                <div class="glass-card p-8 border-t-4 border-secondary group hover:bg-white/5">
+                    <div class="text-4xl mb-4 text-secondary">🎓</div>
+                    <h3 class="text-xl font-bold mb-2 text-white"><span class="lang-en">AI Film Academy</span><span class="lang-zh">AI 電影學院</span></h3>
+                    <p class="text-sm text-gray-400 mb-4"><span class="lang-en">Talent hub. MIT/Stanford collab. Full scholarships.</span><span class="lang-zh">人才樞紐。與MIT/斯坦福合作。每年資助全額獎學金。</span></p>
+                     <div class="text-xs text-secondary font-bold"><i class="fas fa-user-graduate mr-1"></i> <span class="lang-en">Talent Cultivation</span><span class="lang-zh">人才培養</span></div>
                 </div>
-
-                <!-- Pillar 3 -->
-                <div class="card">
-                    <i class="fas fa-globe card-icon"></i>
-                    <h4 class="card-title" data-en="Global Submission Center" data-zh="全球徵片中心">全球徵片中心</h4>
-                    <p style="color: #ccc; margin-bottom: 1rem;" data-en="AIF.Center is the global hub for discovering, screening, and distributing quality AI-native content" data-zh="AIF.Center是發現、篩選和分發優質AI原生內容的全球樞紐">AIF.Center是發現、篩選和分發優質AI原生內容的全球樞紐</p>
-
-                    <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.5rem;" data-en="Global Network" data-zh="全球網絡">全球網絡</h5>
-                        <ul style="font-size: 0.9rem; color: #aaa; line-height: 1.8;">
-                            <li data-en="• HQ: Hong Kong" data-zh="• 總部:香港">• 總部:香港</li>
-                            <li data-en="• 6 Regional Centers (LA, Berlin, Mexico City, Dubai, Singapore)" data-zh="• 6個區域中心(洛杉磯、柏林、墨西哥城、迪拜、新加坡)">• 6個區域中心(洛杉磯、柏林、墨西哥城、迪拜、新加坡)</li>
-                            <li data-en="• 30+ Local Nodes Worldwide" data-zh="• 全球30+地方節點">• 全球30+地方節點</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: rgba(0,255,157,0.2); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Professional Services" data-zh="專業服務">專業服務</h5>
-                        <ul style="font-size: 0.9rem; color: #ccc; line-height: 1.8;">
-                            <li data-en="• Strategic Consulting & Tech Guidance" data-zh="• 戰略諮詢與技術指導">• 戰略諮詢與技術指導</li>
-                            <li data-en="• FilmToken Design & Issuance" data-zh="• FilmToken設計與發行">• FilmToken設計與發行</li>
-                            <li data-en="• Copyright Protection" data-zh="• 版權保護">• 版權保護</li>
-                            <li data-en="• Multi-Language Translation" data-zh="• 多語種翻譯">• 多語種翻譯</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: rgba(255,215,0,0.2); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--gold); margin-bottom: 0.5rem;" data-en="Distribution (50+ Partners)" data-zh="分發渠道(50+合作夥伴)">分發渠道(50+合作夥伴)</h5>
-                        <p style="font-size: 0.9rem; color: #ccc;">Netflix, Amazon Prime, Disney+, AMC, IMAX, TikTok, YouTube</p>
-                    </div>
+                <div class="glass-card p-8 border-t-4 border-accent group hover:bg-white/5">
+                    <div class="text-4xl mb-4 text-accent">🌍</div>
+                    <h3 class="text-xl font-bold mb-2 text-white"><span class="lang-en">AIF.Center</span><span class="lang-zh">全球徵片中心</span></h3>
+                    <p class="text-sm text-gray-400 mb-4"><span class="lang-en">6 Regional HQs. Global distribution (Netflix, Disney+).</span><span class="lang-zh">六大區域總部。全球分發（Netflix, Disney+）。</span></p>
+                     <div class="text-xs text-accent font-bold"><i class="fas fa-globe mr-1"></i> <span class="lang-en">Global Hub</span><span class="lang-zh">全球樞紐</span></div>
                 </div>
-
-                <!-- Pillar 4 -->
-                <div class="card">
-                    <i class="fas fa-vr-cardboard card-icon"></i>
-                    <h4 class="card-title" data-en="404.world Interactive Platform" data-zh="404.world互動平台">404.world互動平台</h4>
-                    <p style="color: #ccc; margin-bottom: 1rem;" data-en="Revolutionary AI-powered interactive streaming platform - audiences become co-creators" data-zh="革命性AI驅動互動流媒體平台 - 觀眾成為共同創造者">革命性AI驅動互動流媒體平台 - 觀眾成為共同創造者</p>
-
-                    <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.5rem;" data-en="Core Technologies" data-zh="核心技術">核心技術</h5>
-                        <ul style="font-size: 0.9rem; color: #aaa; line-height: 1.8;">
-                            <li data-en="• Real-Time AI Content Generation" data-zh="• 實時AI內容生成">• 實時AI內容生成</li>
-                            <li data-en="• Multimodal Interaction (Voice/Gesture/Brain)" data-zh="• 多模態交互(語音/手勢/腦波)">• 多模態交互(語音/手勢/腦波)</li>
-                            <li data-en="• Immersive VR/AR/MR Integration" data-zh="• 沉浸式VR/AR/MR整合">• 沉浸式VR/AR/MR整合</li>
-                            <li data-en="• Social Co-Viewing Features" data-zh="• 社交共同觀看功能">• 社交共同觀看功能</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: linear-gradient(135deg, rgba(52,152,219,0.3), rgba(0,255,157,0.3)); padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--accent);">
-                        <h5 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Watch-to-Earn Mechanism" data-zh="觀看即挖礦">觀看即挖礦</h5>
-                        <p style="font-size: 0.9rem; color: #fff;">通過觀看、互動、評分和分享內容獲得AIF代幣</p>
-                    </div>
+                <div class="glass-card p-8 border-t-4 border-pink-400 group hover:bg-white/5">
+                    <div class="text-4xl mb-4 text-pink-400">👓</div>
+                    <h3 class="text-xl font-bold mb-2 text-white"><span class="lang-en">404.world</span><span class="lang-zh">404.world 平台</span></h3>
+                    <p class="text-sm text-gray-400 mb-4"><span class="lang-en">Interactive streaming. Watch-to-Earn. VR/AR immersion.</span><span class="lang-zh">互動流媒體。觀看即挖礦。VR/AR沉浸體驗。</span></p>
+                     <div class="text-xs text-pink-400 font-bold"><i class="fas fa-eye mr-1"></i> <span class="lang-en">Interactive Platform</span><span class="lang-zh">互動平台</span></div>
                 </div>
-            </div>
-
-            <h3 style="text-align: center; font-size: 2rem; color: var(--accent); margin: 4rem 0 2rem;" data-en="Two Major Infrastructures" data-zh="兩大基礎設施">兩大基礎設施</h3>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                <div class="card">
-                    <i class="fas fa-exchange-alt card-icon" style="color: var(--primary);"></i>
-                    <h4 class="card-title" data-en="AIF.Market Trading Platform" data-zh="AIF.Market交易平台">AIF.Market交易平台</h4>
-                    <p style="color: #ccc; margin-bottom: 1rem;" data-en="Core trading and value circulation platform with NFT minting, FilmToken issuance, and smart contract execution" data-zh="核心交易和價值流通平台,提供NFT鑄造、FilmToken發行和智能合約執行">核心交易和價值流通平台,提供NFT鑄造、FilmToken發行和智能合約執行</p>
-
-                    <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.5rem;" data-en="Blockchain Architecture" data-zh="區塊鏈架構">區塊鏈架構</h5>
-                        <ul style="font-size: 0.9rem; color: #aaa; line-height: 1.8;">
-                            <li data-en="• Base: Solana Mainnet" data-zh="• 基礎層:Solana主網">• 基礎層:Solana主網</li>
-                            <li data-en="• Expansion: Solana Network" data-zh="• 擴展層:Solana網絡">• 擴展層:Solana網絡</li>
-                            <li data-en="• Storage: Filecoin" data-zh="• 存儲層:Filecoin">• 存儲層:Filecoin</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: rgba(255,215,0,0.2); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--gold); margin-bottom: 0.5rem;" data-en="Security Audits" data-zh="安全審計">安全審計</h5>
-                        <p style="font-size: 0.9rem; color: #ccc;">CertiK, SlowMist, PeckShield</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <i class="fas fa-chart-line card-icon" style="color: var(--accent);"></i>
-                    <h4 class="card-title" data-en="AIF Exchange" data-zh="AIF交易所">AIF交易所</h4>
-                    <p style="color: #ccc; margin-bottom: 1rem;" data-en="Professional digital asset trading platform with multi-token liquidity and compliant asset management" data-zh="專業級數字資產交易平台,提供多代幣流動性和合規資產管理">專業級數字資產交易平台,提供多代幣流動性和合規資產管理</p>
-
-                    <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Trading Support" data-zh="交易支持">交易支持</h5>
-                        <ul style="font-size: 0.9rem; color: #aaa; line-height: 1.8;">
-                            <li data-en="• AIF Ecosystem Tokens" data-zh="• AIF生態代幣">• AIF生態代幣</li>
-                            <li data-en="• FilmToken Project Tokens" data-zh="• FilmToken項目代幣">• FilmToken項目代幣</li>
-                            <li data-en="• NFT Asset Trading" data-zh="• NFT資產交易">• NFT資產交易</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: rgba(0,255,157,0.2); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Compliance" data-zh="合規">合規</h5>
-                        <p style="font-size: 0.9rem; color: #ccc;" data-en="Complete KYC/AML, Market Makers, Liquidity Pools" data-zh="完善KYC/AML、做市商機制、流動性池">完善KYC/AML、做市商機制、流動性池</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Part III: Tokenomics -->
-    <section id="tokenomics" class="section">
-        <div class="container">
-            <h2 class="section-title" data-en="Innovative Token Economic Model" data-zh="創新代幣經濟模型">創新代幣經濟模型</h2>
-            <p class="section-subtitle" data-en="World's first three-driven token model for AI-native film industry: AIF Token + NFT Module + FilmToken" data-zh="全球首個AI原生影視產業三驅動代幣模型:AIF代幣 + NFT模塊 + FilmToken">全球首個AI原生影視產業三驅動代幣模型:AIF代幣 + NFT模塊 + FilmToken</p>
-
-            <div class="grid">
-                <!-- AIF Token -->
-                <div class="card">
-                    <i class="fas fa-coins card-icon"></i>
-                    <h3 class="card-title" data-en="AIF Token: Core Value Carrier" data-zh="AIF代幣:核心價值載體">AIF代幣:核心價值載體</h3>
-                    <p style="color: #ccc; margin-bottom: 1rem;" data-en="Universal utility token and governance credential. Total supply: 10 billion, never to be increased" data-zh="通用實用代幣和治理憑證。總供應量:100億枚,永不增發">通用實用代幣和治理憑證。總供應量:100億枚,永不增發</p>
-
-                    <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.5rem;" data-en="Token Distribution" data-zh="代幣分配">代幣分配</h5>
-                        <ul style="font-size: 0.9rem; color: #aaa; line-height: 1.8;">
-                            <li data-en="• Ecosystem: 30%" data-zh="• 生態建設:30%">• 生態建設:30%</li>
-                            <li data-en="• Team & Advisors: 20% (4-year unlock)" data-zh="• 團隊顧問:20%(4年解鎖)">• 團隊顧問:20%(4年解鎖)</li>
-                            <li data-en="• Private Investors: 15%" data-zh="• 私募投資:15%">• 私募投資:15%</li>
-                            <li data-en="• Public Offering: 10%" data-zh="• 公開發售:10%">• 公開發售:10%</li>
-                            <li data-en="• Community: 15%" data-zh="• 社區激勵:15%">• 社區激勵:15%</li>
-                            <li data-en="• Strategic Partners: 10%" data-zh="• 戰略合作:10%">• 戰略合作:10%</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: rgba(0,255,157,0.2); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Core Functions" data-zh="核心功能">核心功能</h5>
-                        <ul style="font-size: 0.9rem; color: #ccc; line-height: 1.8;">
-                            <li data-en="• Governance Voting Rights" data-zh="• 治理投票權">• 治理投票權</li>
-                            <li data-en="• Ecosystem Rewards" data-zh="• 生態獎勵">• 生態獎勵</li>
-                            <li data-en="• Fee Payment (with discounts)" data-zh="• 手續費支付(享折扣)">• 手續費支付(享折扣)</li>
-                            <li data-en="• Staking Benefits" data-zh="• 質押權益">• 質押權益</li>
-                            <li data-en="• Cross-Platform Circulation" data-zh="• 跨平台流通">• 跨平台流通</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: linear-gradient(135deg, rgba(255,0,0,0.3), rgba(139,0,0,0.3)); padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid rgba(255,0,0,0.5);">
-                        <h5 style="color: #ff6b6b; margin-bottom: 0.5rem;" data-en="Deflationary Mechanism" data-zh="通縮機制">通縮機制</h5>
-                        <ul style="font-size: 0.9rem; color: #fff; line-height: 1.8;">
-                            <li data-en="• 50% of fees → Buyback & Burn" data-zh="• 50%手續費→回購銷毀">• 50%手續費→回購銷毀</li>
-                            <li data-en="• Milestone Event Burns" data-zh="• 里程碑事件銷毀">• 里程碑事件銷毀</li>
-                            <li data-en="• Governance-Adjustable Ratio" data-zh="• 治理可調整比例">• 治理可調整比例</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- NFT Module -->
-                <div class="card">
-                    <i class="fas fa-palette card-icon"></i>
-                    <h3 class="card-title" data-en="NFT Module: Digital IP Revolution" data-zh="NFT模塊:知識產權數字化革命">NFT模塊:知識產權數字化革命</h3>
-                    <p style="color: #ccc; margin-bottom: 1rem;" data-en="Core tool for IP digitization, rights confirmation, trading, and value discovery" data-zh="實現知識產權數字化、確權、交易和價值發現的核心工具">實現知識產權數字化、確權、交易和價值發現的核心工具</p>
-
-                    <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.5rem;" data-en="NFT Categories" data-zh="NFT類別">NFT類別</h5>
-                        <ul style="font-size: 0.9rem; color: #aaa; line-height: 1.8;">
-                            <li data-en="• Complete Film Works" data-zh="• 完整電影作品">• 完整電影作品</li>
-                            <li data-en="• Scripts & Character Designs" data-zh="• 劇本與角色設計">• 劇本與角色設計</li>
-                            <li data-en="• Scenes & Music Scores" data-zh="• 場景與音樂配樂">• 場景與音樂配樂</li>
-                            <li data-en="• Special Effects Materials" data-zh="• 特效素材">• 特效素材</li>
-                            <li data-en="• Posters & BTS Content" data-zh="• 海報與幕後內容">• 海報與幕後內容</li>
-                            <li data-en="• Awards & Honors" data-zh="• 獲獎證書與榮譽">• 獲獎證書與榮譽</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: linear-gradient(135deg, rgba(52,152,219,0.3), rgba(0,255,157,0.3)); padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--accent);">
-                        <h5 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Automated Royalty Distribution" data-zh="自動化版稅分配">自動化版稅分配</h5>
-                        <p style="font-size: 0.9rem; color: #fff;" data-en="Smart contracts automatically distribute royalties to creators, contributors, and platform on secondary market trades - transparent and immutable" data-zh="智能合約在二級市場交易時自動分配版稅給創作者、貢獻者和平台 - 透明且不可篡改">智能合約在二級市場交易時自動分配版稅給創作者、貢獻者和平台 - 透明且不可篡改</p>
-                    </div>
-
-                    <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--gold); margin-bottom: 0.5rem;" data-en="Licensing System" data-zh="授權管理">授權管理</h5>
-                        <p style="font-size: 0.9rem; color: #aaa;" data-en="Flexible licensing: Time (temporary/long-term/permanent), Geography (global/regional/country), Usage (commercial/non-commercial/educational), Exclusivity" data-zh="靈活授權:時間(臨時/長期/永久)、地域(全球/區域/國家)、用途(商業/非商業/教育)、獨占性">靈活授權:時間(臨時/長期/永久)、地域(全球/區域/國家)、用途(商業/非商業/教育)、獨占性</p>
-                    </div>
-                </div>
-
-                <!-- FilmToken -->
-                <div class="card">
-                    <i class="fas fa-ticket-alt card-icon"></i>
-                    <h3 class="card-title" data-en="FilmToken: Project-Specific Tool" data-zh="FilmToken:項目專屬工具">FilmToken:項目專屬工具</h3>
-                    <p style="color: #ccc; margin-bottom: 1rem;" data-en="Innovative film project financing model - each project issues dedicated tokens representing future revenue sharing and decision participation rights" data-zh="創新電影項目众籌模式 - 每個項目發行專屬代幣,代表未來收益分享權和決策參與權">創新電影項目众籌模式 - 每個項目發行專屬代幣,代表未來收益分享權和決策參與權</p>
-
-                    <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.5rem;" data-en="Multi-Round Structure" data-zh="多輪结构">多輪结构</h5>
-                        <ul style="font-size: 0.9rem; color: #aaa; line-height: 1.8;">
-                            <li data-en="• Seed: 20-30% discount, 12-mo lock" data-zh="• 種子輪:20-30%折扣,12月鎖定">• 種子輪:20-30%折扣,12月鎖定</li>
-                            <li data-en="• Private: 15-20% discount, 9-mo lock" data-zh="• 私募輪:15-20%折扣,9月鎖定">• 私募輪:15-20%折扣,9月鎖定</li>
-                            <li data-en="• Public: 0-10% discount, 6-mo lock" data-zh="• 公開輪:0-10%折扣,6月鎖定">• 公開輪:0-10%折扣,6月鎖定</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,165,0,0.3)); padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--gold);">
-                        <h5 style="color: var(--gold); margin-bottom: 0.5rem;" data-en="Smart Fund Management" data-zh="智能資金管理">智能資金管理</h5>
-                        <p style="font-size: 0.85rem; color: #fff; margin-bottom: 0.5rem;" data-en="Milestone-based fund release:" data-zh="基於里程碑的資金釋放:">基於里程碑的資金釋放:</p>
-                        <ul style="font-size: 0.85rem; color: #fff; line-height: 1.6;">
-                            <li data-en="• Pre-Production: 20%" data-zh="• 製作前期:20%">• 製作前期:20%</li>
-                            <li data-en="• Production: 40%" data-zh="• 製作期:40%">• 製作期:40%</li>
-                            <li data-en="• Post-Production: 25%" data-zh="• 後期製作:25%">• 後期製作:25%</li>
-                            <li data-en="• Distribution: 15%" data-zh="• 發行推廣:15%">• 發行推廣:15%</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <h5 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Token Holder Rights" data-zh="代幣持有者權益">代幣持有者權益</h5>
-                        <ul style="font-size: 0.9rem; color: #aaa; line-height: 1.8;">
-                            <li data-en="• Revenue Distribution" data-zh="• 收益分配">• 收益分配</li>
-                            <li data-en="• Decision Participation" data-zh="• 決策參與">• 決策參與</li>
-                            <li data-en="• Special Rights (Premieres, etc.)" data-zh="• 特殊權益(首映禮等)">• 特殊權益(首映禮等)</li>
-                            <li data-en="• Secondary Market Trading" data-zh="• 二級市場交易">• 二級市場交易</li>
-                            <li data-en="• Token Buyback" data-zh="• 代幣回購">• 代幣回購</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Partners -->
-    <section class="section" style="background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.5), transparent);">
-        <div class="container">
-            <h2 class="section-title" data-en="Global Cooperation Network" data-zh="全球合作網絡">全球合作網絡</h2>
-
-            <div class="highlight-box">
-                <h3 style="font-size: 2rem; margin-bottom: 1.5rem; text-align: center; color: var(--accent);" data-en="Technology Partners" data-zh="技術合作夥伴">技術合作夥伴</h3>
                 
-                <h4 style="color: var(--primary); margin-bottom: 1rem;" data-en="AI Technology" data-zh="AI技術">AI技術</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">Google/DeepMind</div>
-                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">OpenAI</div>
-                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">Meta</div>
-                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">Microsoft</div>
-                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">NVIDIA</div>
-                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">Adobe</div>
+                <!-- 2 Infrastructure -->
+                <div class="glass-card p-8 border-t-4 border-primary group hover:bg-white/5">
+                    <div class="text-4xl mb-4 text-primary">🛒</div>
+                    <h3 class="text-xl font-bold mb-2 text-white"><span class="lang-en">AIF.Market</span><span class="lang-zh">AI 電影市場</span></h3>
+                    <p class="text-sm text-gray-400 mb-4"><span class="lang-en">NFT Minting & FilmToken Crowdfunding. Built on Solana.</span><span class="lang-zh">NFT鑄造與FilmToken眾籌。基於Solana構建。</span></p>
+                     <div class="text-xs text-primary font-bold"><i class="fas fa-shopping-cart mr-1"></i> <span class="lang-en">Trading Platform</span><span class="lang-zh">交易平台</span></div>
+                </div>
+                <div class="glass-card p-8 border-t-4 border-emerald-400 group hover:bg-white/5">
+                    <div class="text-4xl mb-4 text-emerald-400">💱</div>
+                    <h3 class="text-xl font-bold mb-2 text-white"><span class="lang-en">AIF Exchange</span><span class="lang-zh">AIF 交易所</span></h3>
+                    <p class="text-sm text-gray-400 mb-4"><span class="lang-en">Pro liquidity for ecosystem assets. KYC/AML Compliant.</span><span class="lang-zh">為生態資產提供專業流動性。嚴格符合KYC/AML。</span></p>
+                     <div class="text-xs text-emerald-400 font-bold"><i class="fas fa-exchange-alt mr-1"></i> <span class="lang-en">Digital Asset Exchange</span><span class="lang-zh">數字資產交易所</span></div>
                 </div>
 
-                <h4 style="color: var(--secondary); margin-bottom: 1rem;" data-en="Blockchain Infrastructure" data-zh="區塊鏈基礎設施">區塊鏈基礎設施</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">Solana</div>
-                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">Polygon</div>
-                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">Filecoin</div>
-                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">Chainlink</div>
-                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">ConsenSys</div>
+                <!-- 3 Innovation Modules -->
+                <div class="glass-card p-8 border-t-4 border-yellow-400 group hover:bg-white/5">
+                    <div class="text-4xl mb-4 text-yellow-400">🌟</div>
+                    <h3 class="text-xl font-bold mb-2 text-white"><span class="lang-en">StarOS</span><span class="lang-zh">StarOS 數字人經紀</span></h3>
+                    <p class="text-sm text-gray-400 mb-4"><span class="lang-en">Digital Identity & Value Migration for celebrities.</span><span class="lang-zh">明星價值進入AI時代的門戶。數字身份管理。</span></p>
+                     <div class="text-xs text-yellow-400 font-bold"><i class="fas fa-user-astronaut mr-1"></i> <span class="lang-en">Digital Humans</span><span class="lang-zh">數字人</span></div>
                 </div>
-
-                <div style="text-align: center; padding: 1.5rem; background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,165,0,0.2)); border-radius: 8px; border: 1px solid var(--gold);">
-                    <h5 style="color: var(--gold); margin-bottom: 0.5rem;" data-en="Security Audits" data-zh="安全審計">安全審計</h5>
-                    <p style="color: #fff; font-weight: 600;">CertiK  •  SlowMist  •  PeckShield</p>
+                <div class="glass-card p-8 border-t-4 border-red-400 group hover:bg-white/5">
+                    <div class="text-4xl mb-4 text-red-400">📜</div>
+                    <h3 class="text-xl font-bold mb-2 text-white"><span class="lang-en">HKAIFC Standards</span><span class="lang-zh">標準委員會</span></h3>
+                    <p class="text-sm text-gray-400 mb-4"><span class="lang-en">Setting global standards for AI-native cinema certification.</span><span class="lang-zh">制定全球AI原生影視行業標準與質量認證。</span></p>
+                     <div class="text-xs text-red-400 font-bold"><i class="fas fa-file-contract mr-1"></i> <span class="lang-en">Global Standards</span><span class="lang-zh">全球標準</span></div>
+                </div>
+                <div class="glass-card p-8 border-t-4 border-indigo-400 group hover:bg-white/5">
+                    <div class="text-4xl mb-4 text-indigo-400">🕶️</div>
+                    <h3 class="text-xl font-bold mb-2 text-white"><span class="lang-en">404GLASS</span><span class="lang-zh">404GLASS 硬件</span></h3>
+                    <p class="text-sm text-gray-400 mb-4"><span class="lang-en">Next-gen hardware for seamless AI-native experiences.</span><span class="lang-zh">專為AI原生體驗設計的下一代混合現實硬件。</span></p>
+                     <div class="text-xs text-indigo-400 font-bold"><i class="fas fa-glasses mr-1"></i> <span class="lang-en">Hardware</span><span class="lang-zh">硬件終端</span></div>
                 </div>
             </div>
+            
+            <!-- Infrastructure Endorsements -->
+            <div class="mt-12 text-center">
+                 <div class="inline-flex items-center gap-6 px-6 py-3 border border-white/20 rounded-full bg-white/5">
+                     <span class="text-sm text-gray-400"><span class="lang-en">Audited By:</span><span class="lang-zh">審計機構：</span></span>
+                     <div class="flex gap-4">
+                         <span class="font-bold text-white flex items-center gap-2"><i class="fas fa-shield-alt text-green-400"></i> CertiK</span>
+                         <span class="font-bold text-white flex items-center gap-2"><i class="fas fa-lock text-blue-400"></i> SlowMist</span>
+                     </div>
+                 </div>
+            </div>
+        </div>
+    </section>
 
-            <div class="highlight-box">
-                <h3 style="font-size: 2rem; margin-bottom: 1.5rem; text-align: center; color: var(--accent);" data-en="Academic Partners" data-zh="學術合作">學術合作</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(0,0,0,0.5); border-radius: 8px;">
-                        <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem;">MIT</div>
-                        <div style="font-size: 0.85rem; color: #aaa;" data-en="AI Technology & HCI" data-zh="AI技術與人機交互">AI技術與人機交互</div>
+    <!-- Prize Pool (Visual Impact) -->
+    <section class="py-24 relative overflow-hidden border-y border-gold/20">
+        <div class="absolute inset-0 bg-gradient-to-r from-black via-gold/5 to-black"></div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="text-gold font-mono-tech tracking-[0.5em] uppercase mb-2 animate-pulse">
+                <span class="lang-en">Total Prize Pool</span><span class="lang-zh">總獎金池</span>
+            </div>
+            <div class="prize-pool-text font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-600 font-tech filter drop-shadow-[0_0_20px_rgba(255,215,0,0.4)]">
+                $3,000,000
+            </div>
+            <div class="mt-8 flex justify-center gap-4 flex-wrap text-sm text-white/80 font-mono">
+                <div class="px-4 py-1 border border-gold/30 rounded-full"><span class="text-gold">$1M</span> Unicorn Gold</div>
+                <div class="px-4 py-1 border border-gold/30 rounded-full"><span class="text-gold">$200K</span> Community</div>
+                <div class="px-4 py-1 border border-gold/30 rounded-full"><span class="text-gold">$150K</span> Tech Innovation</div>
+                <div class="px-4 py-1 border border-gold/30 rounded-full"><span class="text-gold">$200K</span> Ethics</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tokenomics Section (Updated Distribution) -->
+    <section id="tokenomics" class="py-24 bg-white/5">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 font-tech text-white">
+                    <span class="lang-en">Token <span class="text-accent">Distribution</span></span>
+                    <span class="lang-zh">代幣 <span class="text-accent">分配模型</span></span>
+                </h2>
+                <p class="text-gray-400 text-lg">
+                    <span class="lang-en">Total Supply: 10 Billion AIF. "Three-Driven" model (AIF + NFT + FilmToken).</span>
+                    <span class="lang-zh">總供應量：100億 AIF。「三驅動」模型（AIF + NFT + FilmToken）。</span>
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Left: Allocation Bars -->
+                <div class="gs-slide-right space-y-8">
+                    <div class="group">
+                        <div class="flex justify-between text-sm mb-2 font-bold text-white">
+                            <span class="text-primary">Ecosystem Development</span>
+                            <span>30% (3B)</span>
+                        </div>
+                        <div class="h-3 bg-gray-800 rounded-full overflow-hidden"><div class="h-full bg-primary width-anim" style="width:0%" data-width="30%"></div></div>
+                        <p class="text-xs text-gray-500 mt-1"><span class="lang-en">Platform dev & operations</span><span class="lang-zh">平台開發與運營</span></p>
                     </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(0,0,0,0.5); border-radius: 8px;">
-                        <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem;">Stanford</div>
-                        <div style="font-size: 0.85rem; color: #aaa;" data-en="Computer Vision & NLP" data-zh="計算機視覺與NLP">計算機視覺與NLP</div>
+                    <div class="group">
+                        <div class="flex justify-between text-sm mb-2 font-bold text-white">
+                            <span class="text-blue-400">Public Sale</span>
+                            <span>25% (2.5B)</span>
+                        </div>
+                        <div class="h-3 bg-gray-800 rounded-full overflow-hidden"><div class="h-full bg-blue-400 width-anim" style="width:0%" data-width="25%"></div></div>
+                        <p class="text-xs text-gray-500 mt-1"><span class="lang-en">Public market sale</span><span class="lang-zh">公開市場發售</span></p>
                     </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(0,0,0,0.5); border-radius: 8px;">
-                        <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem;">Carnegie Mellon</div>
-                        <div style="font-size: 0.85rem; color: #aaa;" data-en="ML & Creative AI" data-zh="機器學習與創意AI">機器學習與創意AI</div>
+                    <div class="group">
+                        <div class="flex justify-between text-sm mb-2 font-bold text-white">
+                            <span class="text-accent">Invitation Release</span>
+                            <span>15% (1.5B)</span>
+                        </div>
+                        <div class="h-3 bg-gray-800 rounded-full overflow-hidden"><div class="h-full bg-accent width-anim" style="width:0%" data-width="15%"></div></div>
+                         <p class="text-xs text-gray-500 mt-1"><span class="lang-en">10 rounds invitation</span><span class="lang-zh">10輪邀請制釋放</span></p>
                     </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(0,0,0,0.5); border-radius: 8px;">
-                        <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem;">Tsinghua</div>
-                        <div style="font-size: 0.85rem; color: #aaa;" data-en="AI Ethics" data-zh="AI倫理">AI倫理</div>
+                     <div class="group">
+                        <div class="flex justify-between text-sm mb-2 font-bold text-white">
+                            <span class="text-secondary">Team & Advisors</span>
+                            <span>15% (1.5B)</span>
+                        </div>
+                        <div class="h-3 bg-gray-800 rounded-full overflow-hidden"><div class="h-full bg-secondary width-anim" style="width:0%" data-width="15%"></div></div>
+                         <p class="text-xs text-gray-500 mt-1"><span class="lang-en">4-year linear vesting</span><span class="lang-zh">4年線性釋放</span></p>
                     </div>
-                    <div style="text-align: center; padding: 1.5rem; background: rgba(0,0,0,0.5); border-radius: 8px;">
-                        <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem;">HKU</div>
-                        <div style="font-size: 0.85rem; color: #aaa;" data-en="Creative Industries" data-zh="創意產業">創意產業</div>
+                    <div class="group">
+                        <div class="flex justify-between text-sm mb-2 font-bold text-white">
+                            <span class="text-pink-500">Community Rewards</span>
+                            <span>15% (1.5B)</span>
+                        </div>
+                        <div class="h-3 bg-gray-800 rounded-full overflow-hidden"><div class="h-full bg-pink-500 width-anim" style="width:0%" data-width="15%"></div></div>
+                         <p class="text-xs text-gray-500 mt-1"><span class="lang-en">Staking rewards</span><span class="lang-zh">質押獎勵</span></p>
+                    </div>
+                </div>
+
+                <!-- Right: Three-Driven Model Cards -->
+                <div class="gs-slide-left grid gap-6">
+                    <div class="glass-card p-6 border-l-4 border-primary">
+                        <h3 class="text-primary font-bold text-xl mb-2">AIF Token</h3>
+                        <p class="text-sm text-gray-300"><span class="lang-en">Universal Utility & Governance.</span><span class="lang-zh">通用實用與治理憑證。</span></p>
+                    </div>
+                    <div class="glass-card p-6 border-l-4 border-accent">
+                        <h3 class="text-accent font-bold text-xl mb-2">NFT</h3>
+                        <p class="text-sm text-gray-300"><span class="lang-en">IP Digitization & Royalties.</span><span class="lang-zh">IP數字化確權與版稅分配。</span></p>
+                    </div>
+                    <div class="glass-card p-6 border-l-4 border-gold">
+                        <h3 class="text-gold font-bold text-xl mb-2">FilmToken</h3>
+                        <p class="text-sm text-gray-300"><span class="lang-en">Project Financing.</span><span class="lang-zh">項目專屬融資工具。</span></p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Roadmap -->
-    <section id="roadmap" class="section">
-        <div class="container">
-            <h2 class="section-title" data-en="Development Roadmap" data-zh="發展路線圖">發展路線圖</h2>
-
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <h3 style="color: var(--accent); margin-bottom: 0.5rem; font-size: 1.5rem;" data-en="Phase I: 2024 Q4 - 2025 Q4" data-zh="第一階段:2024 Q4 - 2025 Q4">第一階段:2024 Q4 - 2025 Q4</h3>
-                        <h4 style="color: var(--primary); margin-bottom: 1rem;" data-en="Infrastructure & Ecosystem Launch" data-zh="基礎建設與生態啟動">基礎建設與生態啟動</h4>
-                        <ul style="color: #ccc; line-height: 1.8;">
-                            <li data-en="• First HKAIIFF Festival with 500+ submissions (2025 Q1)" data-zh="• 首屆HKAIIFF電影節,500+參賽作品(2025 Q1)">• 首屆HKAIIFF電影節,500+參賽作品(2025 Q1)</li>
-                            <li data-en="• AIF.Center operational launch" data-zh="• AIF.Center啟動運營">• AIF.Center啟動運營</li>
-                            <li data-en="• First FilmToken projects: $10M raised (2025 Q2)" data-zh="• 首批FilmToken項目:1000萬美元融資(2025 Q2)">• 首批FilmToken項目:1000萬美元融資(2025 Q2)</li>
-                            <li data-en="• 404.world platform launch (2025 Q2)" data-zh="• 404.world平台上線(2025 Q2)">• 404.world平台上線(2025 Q2)</li>
-                            <li data-en="• NFT market: $10M+ trading volume" data-zh="• NFT市場:1000萬美元交易量">• NFT市場:1000萬美元交易量</li>
-                            <li data-en="• 100K+ registered users (2025 Q4)" data-zh="• 10萬+註冊用戶(2025 Q4)">• 10萬+註冊用戶(2025 Q4)</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <h3 style="color: var(--accent); margin-bottom: 0.5rem; font-size: 1.5rem;" data-en="Phase II: 2026 Q1 - 2027 Q4" data-zh="第二階段:2026 Q1 - 2027 Q4">第二階段:2026 Q1 - 2027 Q4</h3>
-                        <h4 style="color: var(--primary); margin-bottom: 1rem;" data-en="Scale Expansion & Globalization" data-zh="規模擴展與全球化">規模擴展與全球化</h4>
-                        <ul style="color: #ccc; line-height: 1.8;">
-                            <li data-en="• 1M+ registered users across 50+ countries" data-zh="• 100萬+註冊用戶,覆蓋50+國家">• 100萬+註冊用戶,覆蓋50+國家</li>
-                            <li data-en="• 2,000+ annual film festival submissions" data-zh="• 年度2000+電影節徵集作品">• 年度2000+電影節徵集作品</li>
-                            <li data-en="• 100+ FilmToken projects, $500M+ raised" data-zh="• 100+個FilmToken項目,5億美元融資">• 100+個FilmToken項目,5億美元融資</li>
-                            <li data-en="• NFT market: $100M+ annual volume" data-zh="• NFT市場:年交易額1億美元">• NFT市場:年交易額1億美元</li>
-                            <li data-en="• AI creation tools serving 10,000+ creators" data-zh="• AI創作工具服務1萬+創作者">• AI創作工具服務1萬+創作者</li>
-                            <li data-en="• Platform revenue: $50M, break-even achieved" data-zh="• 平台年收入5000萬美元,達盈虧平衡">• 平台年收入5000萬美元,達盈虧平衡</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <h3 style="color: var(--accent); margin-bottom: 0.5rem; font-size: 1.5rem;" data-en="Phase III: 2028 Q1 - 2029 Q4" data-zh="第三階段:2028 Q1 - 2029 Q4">第三階段:2028 Q1 - 2029 Q4</h3>
-                        <h4 style="color: var(--primary); margin-bottom: 1rem;" data-en="Industry Standards & Ecosystem Maturity" data-zh="行業標準制定與生態成熟">行業標準制定與生態成熟</h4>
-                        <ul style="color: #ccc; line-height: 1.8;">
-                            <li data-en="• Publish global AI creation standards whitepaper" data-zh="• 發布全球AI創作標準白皮書">• 發布全球AI創作標準白皮書</li>
-                            <li data-en="• Establish international certification system" data-zh="• 建立國際認證體系">• 建立國際認證體系</li>
-                            <li data-en="• Form global governance committee" data-zh="• 成立全球治理委員會">• 成立全球治理委員會</li>
-                            <li data-en="• Platform annual revenue: $200M+" data-zh="• 平台年收入:2億美元+">• 平台年收入:2億美元+</li>
-                            <li data-en="• Total ecosystem value: $10B+" data-zh="• 生態系統總價值:100億美元+">• 生態系統總價值:100億美元+</li>
-                            <li data-en="• Become core hub of global AI creative economy" data-zh="• 成為全球AI創意經濟核心樞紐">• 成為全球AI創意經濟核心樞紐</li>
-                        </ul>
-                    </div>
-                </div>
+    <!-- Partners (Infinite Scroll - Enhanced) -->
+    <section id="partners" class="py-20 bg-black/80 border-y border-white/10 relative overflow-hidden">
+        <div class="container mx-auto px-4 mb-10 text-center">
+            <h2 class="text-sm font-bold tracking-[0.3em] text-gray-500 uppercase mb-4"><span class="lang-en">Strategic Alliance</span><span class="lang-zh">戰略聯盟</span></h2>
+        </div>
+        <!-- Ticker 1 -->
+        <div class="ticker-container mb-8">
+            <div class="ticker-track">
+                <div class="partner-item"><i class="fab fa-google text-blue-400"></i> DeepMind</div>
+                <div class="partner-item"><i class="fas fa-robot text-green-400"></i> OpenAI</div>
+                <div class="partner-item"><i class="fas fa-microchip text-green-500"></i> NVIDIA</div>
+                <div class="partner-item"><i class="fab fa-microsoft text-blue-500"></i> Microsoft</div>
+                <div class="partner-item"><i class="fab fa-meta text-blue-600"></i> Meta AI</div>
+                <div class="partner-item"><i class="fas fa-brain text-purple-400"></i> Anthropic</div>
+                <div class="partner-item"><i class="fas fa-image text-pink-400"></i> Midjourney</div>
+                <div class="partner-item"><i class="fas fa-video text-yellow-400"></i> Runway ML</div>
+                <div class="partner-item"><i class="fas fa-paint-brush text-red-500"></i> Adobe Firefly</div>
+                <!-- Duplicate -->
+                <div class="partner-item"><i class="fab fa-google text-blue-400"></i> DeepMind</div>
+                <div class="partner-item"><i class="fas fa-robot text-green-400"></i> OpenAI</div>
+                <div class="partner-item"><i class="fas fa-microchip text-green-500"></i> NVIDIA</div>
+                <div class="partner-item"><i class="fab fa-microsoft text-blue-500"></i> Microsoft</div>
+                <div class="partner-item"><i class="fab fa-meta text-blue-600"></i> Meta AI</div>
+                <div class="partner-item"><i class="fas fa-brain text-purple-400"></i> Anthropic</div>
+            </div>
+        </div>
+        <!-- Ticker 2 -->
+        <div class="ticker-container">
+            <div class="ticker-track reverse">
+                <div class="partner-item"><i class="fas fa-cubes text-purple-500"></i> Solana</div>
+                <div class="partner-item"><i class="fas fa-layer-group text-purple-400"></i> Polygon</div>
+                <div class="partner-item"><i class="fas fa-server text-blue-300"></i> Filecoin</div>
+                <div class="partner-item"><i class="fas fa-link text-blue-500"></i> Chainlink</div>
+                <div class="partner-item"><i class="fas fa-cube text-gray-400"></i> Render</div>
+                <div class="partner-item"><i class="fas fa-database text-green-300"></i> Arweave</div>
+                <div class="partner-item"><i class="fas fa-university text-red-800"></i> MIT Media Lab</div>
+                <div class="partner-item"><i class="fas fa-graduation-cap text-red-700"></i> Stanford HAI</div>
+                <div class="partner-item"><i class="fas fa-film text-red-600"></i> Netflix</div>
+                <div class="partner-item"><i class="fas fa-mouse text-white"></i> Disney</div>
+                <div class="partner-item"><i class="fas fa-music text-green-500"></i> Spotify</div>
+                 <!-- Duplicate -->
+                <div class="partner-item"><i class="fas fa-cubes text-purple-500"></i> Solana</div>
+                <div class="partner-item"><i class="fas fa-layer-group text-purple-400"></i> Polygon</div>
+                <div class="partner-item"><i class="fas fa-server text-blue-300"></i> Filecoin</div>
+                <div class="partner-item"><i class="fas fa-link text-blue-500"></i> Chainlink</div>
+                <div class="partner-item"><i class="fas fa-cube text-gray-400"></i> Render</div>
+                <div class="partner-item"><i class="fas fa-database text-green-300"></i> Arweave</div>
             </div>
         </div>
     </section>
 
-    <!-- Contact -->
-    <section id="contact" class="section">
-        <div class="container">
-            <h2 class="section-title" data-en="Join Us in Creating the Future" data-zh="攜手共創未來">攜手共創未來</h2>
-            <p class="section-subtitle" data-en="The future is here, creativity knows no bounds. HKAIIFF looks forward to working with you to create artistic legends in the AI era!" data-zh="未來已來,創意無界。香港AI國際電影節期待與您攜手,共創AI時代的藝術傳奇!">未來已來,創意無界。香港AI國際電影節期待與您攜手,共創AI時代的藝術傳奇!</p>
+    <!-- Legal Certificates -->
+    <section id="certificates" class="py-24 bg-gray-900/80">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 font-tech text-white"><span class="lang-en">Legal Documents</span><span class="lang-zh">法律文件與證書</span></h2>
+                <p class="text-gray-400 max-w-3xl mx-auto"><span class="lang-en">Official incorporation and business registration certificates for the Hong Kong AI International Film Festival ecosystem.</span><span class="lang-zh">香港AI國際電影節生態系統的官方註冊和商業登記證書。</span></p>
+            </div>
 
-            <div style="max-width: 800px; margin: 3rem auto;">
-                <div class="highlight-box" style="text-align: center;">
-                    <h3 style="font-size: 2rem; margin-bottom: 2rem; color: var(--accent);" data-en="Contact Information" data-zh="聯繫方式">聯繫方式</h3>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
-                        <div>
-                            <i class="fas fa-globe" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
-                            <h4 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Official Website" data-zh="官方網站">官方網站</h4>
-                            <a href="http://www.hkaiiff.org" style="color: #ccc; text-decoration: none;">www.hkaiiff.org</a>
+            <div class="max-w-5xl mx-auto">
+                <div class="certificate-tabs">
+                    <div class="certificate-tab active" data-cert="incorporation-main"><i class="fas fa-certificate mr-2"></i>Main Incorporation</div>
+                    <div class="certificate-tab" data-cert="incorporation-academy"><i class="fas fa-graduation-cap mr-2"></i>Academy Incorp.</div>
+                    <div class="certificate-tab" data-cert="business1"><i class="fas fa-building mr-2"></i>Business Reg (Market)</div>
+                    <div class="certificate-tab" data-cert="business2"><i class="fas fa-film mr-2"></i>Business Reg (Assoc)</div>
+                </div>
+
+                <!-- Main Cert -->
+                <div class="certificate-content-wrapper active" id="incorporation-main">
+                    <div class="certificate-container" onclick="openModal('incorporation-mainModal')">
+                        <div class="certificate-header">
+                            <div class="certificate-title">註冊證明書</div>
+                            <div class="font-mono opacity-70">CERTIFICATE OF INCORPORATION</div>
                         </div>
-                        
-                        <div>
-                            <i class="fas fa-handshake" style="font-size: 2rem; color: var(--accent); margin-bottom: 1rem;"></i>
-                            <h4 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Business Cooperation" data-zh="商務合作">商務合作</h4>
-                            <a href="mailto:partnership@hkaiiff.org" style="color: #ccc; text-decoration: none;">partnership@hkaiiff.org</a>
+                        <div class="text-center my-8">
+                            <div class="font-mono text-xl text-accent mb-2">No. 77536113</div>
+                            <div class="text-2xl font-bold mb-1">Hong Kong AI International Film Festival Limited</div>
+                            <div class="text-xl">香港人工智能國際電影節協會有限公司</div>
                         </div>
-                        
-                        <div>
-                            <i class="fas fa-headset" style="font-size: 2rem; color: var(--secondary); margin-bottom: 1rem;"></i>
-                            <h4 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Technical Support" data-zh="技術支持">技術支持</h4>
-                            <a href="mailto:support@hkaiiff.org" style="color: #ccc; text-decoration: none;">support@hkaiiff.org</a>
+                        <div class="text-center text-sm opacity-70 mt-8 text-accent font-bold">[ Click to View ]</div>
+                    </div>
+                </div>
+                 <!-- Academy Cert -->
+                <div class="certificate-content-wrapper" id="incorporation-academy">
+                    <div class="certificate-container" onclick="openModal('incorporation-academyModal')">
+                        <div class="certificate-header">
+                            <div class="certificate-title">註冊證明書</div>
+                            <div class="font-mono opacity-70">CERTIFICATE OF INCORPORATION</div>
                         </div>
-                        
-                        <div>
-                            <i class="fas fa-newspaper" style="font-size: 2rem; color: var(--gold); margin-bottom: 1rem;"></i>
-                            <h4 style="color: var(--accent); margin-bottom: 0.5rem;" data-en="Media Inquiries" data-zh="媒體咨詢">媒體咨詢</h4>
-                            <a href="mailto:media@hkaiiff.org" style="color: #ccc; text-decoration: none;">media@hkaiiff.org</a>
+                        <div class="text-center my-8">
+                            <div class="font-mono text-xl text-accent mb-2">No. 77960839</div>
+                            <div class="text-2xl font-bold mb-1">Hong Kong AI Film Academy Limited</div>
                         </div>
+                         <div class="text-center text-sm opacity-70 mt-8 text-accent font-bold">[ Click to View ]</div>
+                    </div>
+                </div>
+                <!-- Business 1 -->
+                <div class="certificate-content-wrapper" id="business1">
+                    <div class="business-reg-cert" onclick="openModal('business1Modal')" style="cursor: pointer;">
+                        <div class="text-center border-b border-blue-500/30 pb-4 mb-4">
+                            <div class="text-blue-400 font-bold text-xl">BUSINESS REGISTRATION</div>
+                            <div class="font-mono text-accent mt-1">Cert No. 77536113-002-12-24-7</div>
+                        </div>
+                        <div class="reg-field"><div class="reg-field-label">Name</div><div class="reg-field-value">HONG KONG ARTIFICIAL INTELLIGENCE FILM MARKET</div></div>
+                         <div class="text-center mt-4 text-accent font-bold text-sm">[ Click to View ]</div>
+                    </div>
+                </div>
+                <!-- Business 2 -->
+                <div class="certificate-content-wrapper" id="business2">
+                    <div class="business-reg-cert" onclick="openModal('business2Modal')" style="cursor: pointer;">
+                        <div class="text-center border-b border-blue-500/30 pb-4 mb-4">
+                            <div class="text-blue-400 font-bold text-xl">BUSINESS REGISTRATION</div>
+                            <div class="font-mono text-accent mt-1">Cert No. 77536113-001-12-24-6</div>
+                        </div>
+                        <div class="reg-field"><div class="reg-field-label">Name</div><div class="reg-field-value">HONG KONG ARTIFICIAL INTERNATIONAL FILM FESTIVAL ASSOCIATION</div></div>
+                         <div class="text-center mt-4 text-accent font-bold text-sm">[ Click to View ]</div>
                     </div>
                 </div>
             </div>
@@ -896,81 +695,88 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <div style="font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 800; background: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem;">HKAIIFF</div>
-                <p style="color: #888;" data-en="Hong Kong AI International Film Festival Association" data-zh="香港人工智能國際電影節協會">香港人工智能國際電影節協會</p>
-            </div>
-            
-            <div style="text-align: center; padding: 2rem 0; border-top: 1px solid rgba(255,255,255,0.1);">
-                <p style="color: #666; margin-bottom: 0.5rem;" data-en="© 2024 Hong Kong AI International Film Festival Association. All rights reserved." data-zh="© 2024 香港人工智能國際電影節協會。保留所有權利。">© 2024 香港人工智能國際電影節協會。保留所有權利。</p>
-                <p style="color: #666; font-size: 0.9rem;" data-en="Document Version: v5.0 | Released: Q4 2024" data-zh="文檔版本:v5.0 | 發布日期:2024年第四季度">文檔版本:v5.0 | 發布日期:2024年第四季度</p>
-            </div>
-            
-            <div style="text-align: center; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                <p style="color: #888; font-size: 0.85rem; margin-bottom: 1rem;" data-en="Disclaimer: This document is for reference only and does not constitute investment advice. Digital asset investment involves risks. Please invest rationally." data-zh="免責聲明:本文檔僅供參考,不構成投資建議。數字資產投資存在風險,請理性投資。">免責聲明:本文檔僅供參考,不構成投資建議。數字資產投資存在風險,請理性投資。</p>
-            </div>
+    <footer class="bg-black pt-20 pb-10 border-t border-gray-900">
+        <div class="container mx-auto px-4 text-center text-sm text-gray-500">
+             <p class="mb-2"><span class="lang-en">© 2025 Hong Kong AI International Film Festival Association. All rights reserved.</span><span class="lang-zh">© 2025 香港人工智能國際電影節協會。保留所有權利。</span></p>
+             <p><span class="lang-en">Disclaimer: This document is for reference only.</span><span class="lang-zh">免責聲明：本文檔僅供參考。</span></p>
         </div>
     </footer>
 
+    <!-- Modals -->
+    <div class="certificate-modal" id="incorporation-mainModal"><div class="certificate-modal-content"><div class="certificate-modal-close" onclick="closeModal('incorporation-mainModal')"><i class="fas fa-times"></i></div><div class="certificate-container"><div class="certificate-header"><div class="certificate-title">註冊證明書</div></div><div class="text-center my-8"><div class="font-mono text-xl mb-2">No. 77536113</div><div class="text-2xl font-bold text-white">Hong Kong AI International Film Festival Limited</div><div class="text-xl mt-2">香港人工智能國際電影節協會有限公司</div></div></div></div></div>
+    <div class="certificate-modal" id="incorporation-academyModal"><div class="certificate-modal-content"><div class="certificate-modal-close" onclick="closeModal('incorporation-academyModal')"><i class="fas fa-times"></i></div><div class="certificate-container"><div class="certificate-header"><div class="certificate-title">註冊證明書</div></div><div class="text-center my-8"><div class="font-mono text-xl mb-2">No. 77960839</div><div class="text-2xl font-bold text-white">Hong Kong AI Film Academy Limited</div></div></div></div></div>
+    <div class="certificate-modal" id="business1Modal"><div class="certificate-modal-content"><div class="certificate-modal-close" onclick="closeModal('business1Modal')"><i class="fas fa-times"></i></div><div class="business-reg-cert"><div class="text-center border-b border-blue-500/30 pb-4 mb-6"><div class="text-2xl font-bold text-blue-400">BUSINESS REGISTRATION</div><div class="font-mono text-accent mt-2">Cert No. 77536113-002-12-24-7</div></div><div class="reg-field"><div class="reg-field-label">Name</div><div class="reg-field-value text-xl">HONG KONG ARTIFICIAL INTELLIGENCE FILM MARKET</div></div></div></div></div>
+    <div class="certificate-modal" id="business2Modal"><div class="certificate-modal-content"><div class="certificate-modal-close" onclick="closeModal('business2Modal')"><i class="fas fa-times"></i></div><div class="business-reg-cert"><div class="text-center border-b border-blue-500/30 pb-4 mb-6"><div class="text-2xl font-bold text-blue-400">BUSINESS REGISTRATION</div><div class="font-mono text-accent mt-2">Cert No. 77536113-001-12-24-6</div></div><div class="reg-field"><div class="reg-field-label">Name</div><div class="reg-field-value text-xl">HONG KONG ARTIFICIAL INTERNATIONAL FILM FESTIVAL ASSOCIATION</div></div></div></div></div>
+
     <script>
-        let isEnglish = false;
-        
-        function toggleLang() {
-            isEnglish = !isEnglish;
-            const lang = isEnglish ? 'en' : 'zh';
-            const langText = document.getElementById('langText');
-            langText.textContent = isEnglish ? '切換至繁體中文' : 'Switch to English';
-            
-            document.querySelectorAll('[data-en]').forEach(el => {
-                el.textContent = el.getAttribute('data-' + lang);
+        function toggleLanguage() { document.body.classList.toggle('zh-mode'); ScrollTrigger.refresh(); }
+        function closeMenu() { document.getElementById('mobile-menu').classList.add('hidden'); }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+
+        // Cert Logic
+        const tabs = document.querySelectorAll('.certificate-tab');
+        const wrappers = document.querySelectorAll('.certificate-content-wrapper');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                wrappers.forEach(w => w.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.cert).classList.add('active');
             });
-            
-            document.documentElement.lang = isEnglish ? 'en' : 'zh-Hant';
+        });
+
+        window.addEventListener('load', () => {
+            const progress = document.getElementById('loader-progress');
+            if(progress) progress.style.width = '100%';
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                if(loader) { gsap.to(loader, { opacity: 0, duration: 0.8, onComplete: () => loader.style.display = 'none' }); initAnimations(); }
+            }, 800);
+        });
+        setTimeout(() => { const loader = document.getElementById('loader'); if(loader && loader.style.display !== 'none') { loader.style.display = 'none'; initAnimations(); } }, 5000);
+
+        gsap.registerPlugin(ScrollTrigger);
+        function initAnimations() {
+            gsap.utils.toArray('.gs-reveal').forEach((elem, i) => { gsap.from(elem, { y: 50, opacity: 0, duration: 1, delay: 0.1 * i, ease: "power3.out" }); });
+            gsap.utils.toArray('.glass-card, .certificate-container').forEach(elem => { gsap.from(elem, { scrollTrigger: { trigger: elem, start: "top 85%" }, y: 50, opacity: 0, duration: 0.8, ease: "power2.out" }); });
+            gsap.utils.toArray('.gs-slide-right').forEach(elem => { gsap.from(elem, { scrollTrigger: { trigger: elem, start: "top 80%" }, x: -50, opacity: 0, duration: 1 }); });
+            gsap.utils.toArray('.gs-slide-left').forEach(elem => { gsap.from(elem, { scrollTrigger: { trigger: elem, start: "top 80%" }, x: 50, opacity: 0, duration: 1 }); });
+            gsap.utils.toArray('.width-anim').forEach(bar => {
+                ScrollTrigger.create({
+                    trigger: bar, start: "top 90%",
+                    onEnter: () => { gsap.to(bar, { width: bar.getAttribute('data-width'), duration: 1.5, ease: "power2.out" }); }
+                });
+            });
         }
-        
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const navLinks = document.getElementById('navLinks');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-        
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                navLinks.classList.remove('active');
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Canvas
+        const canvas = document.getElementById('neuro-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); }
+        window.addEventListener('resize', resize);
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2; this.color = Math.random() > 0.5 ? 'rgba(0, 255, 157,' : 'rgba(142, 68, 173,';
+            }
+            update() { this.x += this.vx; this.y += this.vy; if(this.x<0||this.x>canvas.width)this.vx*=-1; if(this.y<0||this.y>canvas.height)this.vy*=-1; }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fillStyle=this.color+'0.5)'; ctx.fill(); }
+        }
+        function initParticles() { particles = []; for(let i=0; i<100; i++) particles.push(new Particle()); }
+        function animateCanvas() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            particles.forEach((p,i) => {
+                p.update(); p.draw();
+                for(let j=i+1; j<particles.length; j++) {
+                    const p2 = particles[j]; const dist = Math.hypot(p.x-p2.x, p.y-p2.y);
+                    if(dist<120) { ctx.beginPath(); ctx.strokeStyle=`rgba(255,255,255,${0.05-dist/2400})`; ctx.lineWidth=0.5; ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); }
                 }
-            });
-        });
-        
-        // Scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-        
-        document.querySelectorAll('.card, .timeline-item').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.6s ease';
-            observer.observe(el);
-        });
+            }); requestAnimationFrame(animateCanvas);
+        }
+        resize(); animateCanvas();
     </script>
 </body>
 </html>
